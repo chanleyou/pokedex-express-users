@@ -2,6 +2,9 @@ var React = require("react");
 
 class Pokemon extends React.Component {
   render() {
+
+    let pokemon = this.props.result;
+
     return (
       <html>
         <head />
@@ -9,19 +12,19 @@ class Pokemon extends React.Component {
           <div>
             <ul className="pokemon-list">
               <li className="pokemon-attribute">
-                id: {this.props.pokemon.id}
+                id: {pokemon.id}
               </li>
               <li className="pokemon-attribute">
-                name: {this.props.pokemon.name}
+                name: {pokemon.name}
               </li>
               <li className="pokemon-attribute">
-                img: {this.props.pokemon.img}
+                img: {pokemon.img}
               </li>
               <li className="pokemon-attribute">
-                height: {this.props.pokemon.height}
+                height: {pokemon.height}
               </li>
               <li className="pokemon-attribute">
-                weight: {this.props.pokemon.weight}
+                weight: {pokemon.weight}
               </li>
 
             </ul>

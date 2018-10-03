@@ -9,7 +9,7 @@ class Home extends React.Component {
         <body>
           <h1>Welcome to Pokedex</h1>
           <ul>
-            {this.props.pokemon.map(pokemon => (
+            {this.props.table.map(pokemon => (
               <li key={pokemon.id}>
                 {pokemon.name}
               </li>

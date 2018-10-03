@@ -1,27 +1,12 @@
-/**
- * To-do for homework on 28 Jun 2018
- * =================================
- * 1. Create the relevant tables.sql file
- * 2. New routes for user-creation
- * 3. Change the pokemon form to add an input for user id such that the pokemon belongs to the user with that id
- * 4. (FURTHER) Add a drop-down menu of all users on the pokemon form
- * 5. (FURTHER) Add a types table and a pokemon-types table in your database, and create a seed.sql file inserting relevant data for these 2 tables. Note that a pokemon can have many types, and a type can have many pokemons.
- */
-
 const express = require('express');
 const methodOverride = require('method-override');
 const pg = require('pg');
 
-// Initialise postgres client
 const config = {
-  user: 'akira',
+  user: 'chanleyou',
   host: '127.0.0.1',
-  database: 'pokemons',
+  database: 'pokemon',
   port: 5432,
-};
-
-if (config.user === 'ck') {
-	throw new Error("====== UPDATE YOUR DATABASE CONFIGURATION =======");
 };
 
 const pool = new pg.Pool(config);
@@ -30,49 +15,17 @@ pool.on('error', function (err) {
   console.log('Idle client error', err.message, err.stack);
 });
 
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
-
-// Init express app
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
-
-// Set react-views to be the default view engine
 const reactEngine = require('express-react-views').createEngine();
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jsx');
 app.engine('jsx', reactEngine);
 
-/**
- * ===================================
- * Route Handler Functions
- * ===================================
- */
-
- const getRoot = (request, response) => {
-  // query database for all pokemon
-
-  // respond with HTML page displaying all pokemon
-  //
-  const queryString = 'SELECT * from pokemon;';
-  pool.query(queryString, (err, result) => {
-    if (err) {
-      console.error('Query error:', err.stack);
-    } else {
-      console.log('Query result:', result);
-
-      // redirect to home page
-      response.render( 'pokemon/home', {pokemon: result.rows} );
-    }
-  });
-}
-
+// ROUTE FUNCTIONS RAW
 const getNew = (request, response) => {
   response.render('pokemon/new');
 }
@@ -94,7 +47,7 @@ const getPokemon = (request, response) => {
 
 const postPokemon = (request, response) => {
   let params = request.body;
-  
+
   const queryString = 'INSERT INTO pokemon(name, height) VALUES($1, $2);';
   const values = [params.name, params.height];
 
@@ -109,21 +62,6 @@ const postPokemon = (request, response) => {
     }
   });
 };
-
-const editPokemonForm = (request, response) => {
-  let id = request.params['id'];
-  const queryString = 'SELECT * FROM pokemon WHERE id = ' + id + ';';
-  pool.query(queryString, (err, result) => {
-    if (err) {
-      console.error('Query error:', err.stack);
-    } else {
-      console.log('Query result:', result);
-
-      // redirect to home page
-      response.render( 'pokemon/edit', {pokemon: result.rows[0]} );
-    }
-  });
-}
 
 const updatePokemon = (request, response) => {
   let id = request.params['id'];
@@ -191,11 +129,94 @@ const userCreate = (request, response) => {
  * ===================================
  */
 
-app.get('/', getRoot);
 
-app.get('/pokemon/:id/edit', editPokemonForm);
-app.get('/pokemon/new', getNew);
-app.get('/pokemon/:id', getPokemon);
+// ROUTE FUNCTIONS GENERALISED
+
+// list all of a table
+const index = (request, response, table) => {
+
+   let queryString = `SELECT * FROM ${table}`;
+
+   pool.query(queryString, (err, result) => {
+     if (err) {
+       console.error('Query Error:', err.stack);
+     } else {
+
+       response.render(`${table}/home`, {table: result.rows});
+     }
+   })
+ }
+// edit form (duh)
+const editForm = (request, response, table) => {
+
+   let id = request.params.id;
+
+   let queryString = `SELECT * FROM ${table} WHERE id=${id};`;
+
+   pool.query(queryString, (err, result) => {
+     if (err) {
+       console.log('Query Error: ', err.stack);
+     } else {
+
+       response.render(`${table}/edit`, {result: result.rows[0]});
+     }
+   })
+ }
+
+ // new form (duh)
+const newForm = (request, response, table) => {
+   response.render(`${table}/new`);
+ }
+const getItem = (request, response, table) => {
+
+  let id = request.params.id;
+
+  let queryString = `SELECT * FROM ${table} WHERE id =${id};`;
+
+  pool.query(queryString, (err, result) => {
+    if (err) {
+      console.error('Query Error:', err.stack);
+    } else {
+      console.log('Query Result:', result);
+
+      response.render( `${table}/${table}`, {result: result.rows[0]});
+    }
+  })
+}
+
+app.get('/pokemon/:id/edit', (req, res) => {
+  editForm(req, res, "pokemon");
+});
+
+app.get('/users/:id/edit', (req, res) => {
+  editForm(req, res, "users");
+})
+
+app.get('/pokemon/new', (req, res) => {
+  newForm(req, res, "pokemon");
+});
+
+app.get('/users/new', (req, res) => {
+  newForm(req, res, "users");
+});
+
+app.get('/pokemon/:id', (req, res) => {
+  getItem(req, res, "pokemon");
+});
+
+app.get('/users/:id', (req, res) => {
+  getItem(req, res, "users");
+});
+
+app.get('/pokemon/', (req, res) => {
+  index(req, res, "pokemon");
+})
+
+app.get('/users/', (req, res) => {
+  index(req, res, "users");
+})
+
+
 app.get('/pokemon/:id/delete', deletePokemonForm);
 
 app.post('/pokemon', postPokemon);
@@ -205,6 +226,9 @@ app.put('/pokemon/:id', updatePokemon);
 app.delete('/pokemon/:id', deletePokemon);
 
 // TODO: New routes for creating users
+
+
+
 
 app.get('/users/new', userNew);
 app.post('/users', userCreate);
@@ -232,5 +256,3 @@ function shutDown() {
 
 process.on('SIGTERM', shutDown);
 process.on('SIGINT', shutDown);
-
-
