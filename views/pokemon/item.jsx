@@ -4,6 +4,9 @@ class Pokemon extends React.Component {
   render() {
 
     let pokemon = this.props.result;
+    let userList = this.props.users.map ( user => {
+      return <li key={user.id}>{user.name}</li>
+    })
 
     return (
       <html>
@@ -27,6 +30,10 @@ class Pokemon extends React.Component {
                 weight: {pokemon.weight}
               </li>
 
+            </ul>
+            <h4>{pokemon.name} is owned by:</h4>
+            <ul>
+              {userList}
             </ul>
           </div>
         </body>

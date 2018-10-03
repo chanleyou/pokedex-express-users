@@ -167,29 +167,57 @@ const editForm = (request, response, table) => {
 const newForm = (request, response, table) => {
    response.render(`${table}/new`);
  }
-const getItem = (request, response, table) => {
 
-  let id = request.params.id;
+app.post('/catches/:id', (req, res) => {
 
-  let queryString = `SELECT * FROM ${table} WHERE id =${id};`;
+  console.log("Hello!");
 
-  pool.query(queryString, (err, result) => {
+  let id = req.params.id;
+
+  let pokeId = req.body.pokemon_id;
+
+  let insertString = `INSERT INTO users_pokemon (user_id, pokemon_id) VALUES ($1, $2);`;
+
+  let values = [id, pokeId];
+
+  pool.query(insertString, values, (err, result) => {
     if (err) {
       console.error('Query Error:', err.stack);
     } else {
       console.log('Query Result:', result);
 
-      response.render( `${table}/${table}`, {result: result.rows[0]});
+      res.redirect(`/users/${id}/`);
     }
   })
-}
+})
 
 app.get('/pokemon/:id/edit', (req, res) => {
   editForm(req, res, "pokemon");
 });
 
 app.get('/users/:id/edit', (req, res) => {
-  editForm(req, res, "users");
+
+  let id = req.params.id;
+
+  let queryUsers = `SELECT * FROM users WHERE id=${id};`;
+
+  pool.query(queryUsers, (err, resultUser) => {
+    if (err) {
+      console.log('Query Error: ', err.stack);
+    } else {
+
+      let queryPokemon = `SELECT * FROM pokemon`;
+
+      pool.query(queryPokemon, (err, resultPokemon) => {
+        if (err) {
+          console.log('Query Error: ', err.stack);
+        } else {
+
+          res.render(`users/edit`, {pokemon: resultPokemon.rows, user: resultUser.rows[0]});
+        }
+      })
+    }
+  })
 })
 
 app.get('/pokemon/new', (req, res) => {
@@ -201,11 +229,63 @@ app.get('/users/new', (req, res) => {
 });
 
 app.get('/pokemon/:id', (req, res) => {
-  getItem(req, res, "pokemon");
+  let id = req.params.id;
+
+  let queryString = `SELECT * FROM pokemon WHERE id =${id};`;
+
+  pool.query(queryString, (err, result) => {
+    if (err) {
+      console.error('Query Error:', err.stack);
+    } else {
+
+      let joinQuery = `SELECT users.id, users.name
+                      FROM users
+                      INNER JOIN users_pokemon
+                      ON (users.id = users_pokemon.user_id)
+                      WHERE users_pokemon.pokemon_id = ${id};`;
+
+      pool.query(joinQuery, (err, joinResult) => {
+        if (err) {
+          console.error('Query Error:', err.stack);
+        } else {
+          console.log('Query Result:', joinResult.rows);
+
+          res.render( `pokemon/item`, {result: result.rows[0], users: joinResult.rows});
+        }
+      })
+    }
+  })
 });
 
 app.get('/users/:id', (req, res) => {
-  getItem(req, res, "users");
+
+    let id = req.params.id;
+
+    let queryString = `SELECT * FROM users WHERE id =${id};`;
+
+    pool.query(queryString, (err, result) => {
+      if (err) {
+        console.error('Query Error:', err.stack);
+      } else {
+        console.log('Query Result:', result);
+
+        let joinQuery = `SELECT pokemon.id, pokemon.name
+                        FROM pokemon
+                        INNER JOIN users_pokemon
+                        ON (pokemon.id = users_pokemon.pokemon_id)
+                        WHERE users_pokemon.user_id = ${id};`;
+
+        pool.query(joinQuery, (err, joinResult) => {
+          if (err) {
+            console.error('Query Error:', err.stack);
+          } else {
+            console.log('Query Result:', result);
+
+            res.render( `users/item`, {result: result.rows[0], pokemon: joinResult.rows});
+          }
+        })
+      }
+    })
 });
 
 app.get('/pokemon/', (req, res) => {
