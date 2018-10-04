@@ -1,21 +1,27 @@
 var React = require("react");
+var Layout = require('../layout/layout');
 
 class NewUser extends React.Component {
   render() {
     return (
-      <html>
-        <head />
-        <body>
-					<h1>Login</h1> 
+      <Layout title="Login" cookies={this.props.cookies}>
+        <div className="col-md-2"></div>
+        <div className="col-12 col-md-8">
+          <h1 className="my-4">Login</h1>
           <form method="POST" action="/users/login">
-            <label>Username:</label>
-            <input type="text" name="name" required />
-            <label>Password:</label>
-            <input type="text" name="password" />
-            <input type="submit" value="Submit" />
+            <div className="form-group">
+              <label>Username:</label>
+              <input type="text" name="name" className="form-control" placeholder="Username" required autoComplete="off"/>
+            </div>
+            <div className="form-group">
+              <label>Password:</label>
+              <input type="password" name="password" className="form-control" required/>
+            </div>
+            <input type="submit" value="Submit" className="btn"/>
           </form>
-        </body>
-      </html>
+        </div>
+        <div className="col-md-2"></div>        
+      </Layout>
     );
   }
 }

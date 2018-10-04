@@ -9,7 +9,7 @@ module.exports = (pool) => {
 			if (req.cookies.loggedin) {
 				res.redirect('/pokemon/');
 			} else {				
-				res.render ('users/login');
+				res.render ('users/login', {cookies: req.cookies});
 			}			
 		},
 
@@ -30,6 +30,7 @@ module.exports = (pool) => {
 
 						res.cookie('loggedin', 'true');
 						res.cookie('user', result.rows[0].id);
+						res.cookie('username', result.rows[0].name);
 
 						res.redirect('/pokemon/');
 					} else {
@@ -44,6 +45,7 @@ module.exports = (pool) => {
 			
 			res.clearCookie('loggedin');
 			res.clearCookie('user');
+			res.clearCookie('username');
 
 			res.redirect('/');
 		},
@@ -73,7 +75,7 @@ module.exports = (pool) => {
 								res.sendStatus(500);
 							} else {
 
-								res.redirect('users/login');
+								res.redirect('/');
 							}
 						})
 					}
@@ -83,7 +85,11 @@ module.exports = (pool) => {
 
 		newForm: (req, res) => {
 
-			res.render('users/new');
+			if (req.cookies.loggedin) {
+				res.redirect('/pokemon/');
+			} else {				
+				res.render ('users/new', {cookies: req.cookies});
+			}
 		},
 
 		get: (req, res) => {

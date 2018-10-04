@@ -22,7 +22,7 @@ module.exports = (pool) => {
 
 						let values = [user_id, pokemon_id];	
 
-						pool.query(query, values, (err, result) => {
+						pool.query(insertString, values, (err, uselessResult) => {
 							if (err) {
 								console.error(err);
 								res.sendStatus(500);

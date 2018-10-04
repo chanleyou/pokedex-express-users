@@ -3,21 +3,23 @@ var Layout = require('../layout/layout');
 
 class ReleaseButton extends React.Component {
   render () {
-
+    
     let user = this.props.user;
-    let pokemon = this.props.pokemon;
     let cookies = this.props.cookies;
-
-    if (parseInt(user.id) === parseInt(cookies.user)) {
+    let pokemon = this.props.pokemon;
+  
+    if (user.id === parseInt(cookies.user)) {      
       return (
-        <form method="POST" action="/ownership?_method=DELETE">
+        <div>
           <input type="hidden" name="user_id" value ={cookies.user} />
           <input type="hidden" name="pokemon_id" value={pokemon.id} />
-          <input type="submit" value="Release" />
-        </form>
-      )
+          <input type="submit" className="btn btn-sm btn-success" value="Release" />
+        </div>
+      ) 
     } else {
-      return <div />
+      return (
+        <span />
+      )
     }
   }
 }
@@ -25,35 +27,31 @@ class ReleaseButton extends React.Component {
 class Pokemon extends React.Component {
   render() {
 
-    console.log(this.props.pokemon);
-
     let user = this.props.user;
+    let cookies = this.props.cookies;
     let pokemonList = this.props.pokemon.map ( pokemon => {
       
       return (
-        <li key={pokemon.id}>
-          {pokemon.name}
-          <ReleaseButton user={user} pokemon={pokemon} cookies={this.props.cookies} /> 
+        <li key={pokemon.id} className= "py-1">
+          <form method="POST" className="form-inline" action="/ownership?_method=DELETE">
+            <label className="mx-1">{pokemon.name}</label>
+            <ReleaseButton user={user} cookies={cookies} pokemon={pokemon} />
+          </form>
         </li>
       )
     })
 
     return (
-      <Layout title={user.name} cookies={this.props.cookies}> 
-        <ul>
-          <li>
-            id: {user.id}
-          </li>
-          <li>
-            name: {user.name}
-          </li>
-        </ul>
-        <h4>{user.name}'s Pokemon:</h4>
-        <ul>
-          {pokemonList}
-        </ul>
+      <Layout title={user.name} cookies={this.props.cookies}>
+        <div className="col">
+          <h1 className="my-4">{user.name}</h1> 
+          <h4>{user.name}'s Pokemon:</h4>
+          <ul>
+            {pokemonList}
+          </ul>
+        </div>
       </Layout>
-    );
+    )
   }
 }
 
