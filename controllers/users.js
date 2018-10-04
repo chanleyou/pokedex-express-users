@@ -25,18 +25,25 @@ module.exports = (pool) => {
 					console.error(err);
 					res.sendStatus(500);
 				} else {
-					
-					if (password === result.rows[0].password) {
 
-						res.cookie('loggedin', 'true');
-						res.cookie('user', result.rows[0].id);
-						res.cookie('username', result.rows[0].name);
+					if (result.rows.length === 0) {
 
-						res.redirect('/pokemon/');
+						res.send("No such user!");
+
 					} else {
 
-						res.send("Incorrect password!");
-					}
+						if (password === result.rows[0].password) {
+	
+							res.cookie('loggedin', 'true');
+							res.cookie('user', result.rows[0].id);
+							res.cookie('username', result.rows[0].name);
+	
+							res.redirect('/pokemon/');
+						} else {
+	
+							res.send("Incorrect password!");
+						}
+					}					
 				}
 			})
 		},

@@ -44,7 +44,6 @@ class Layout extends React.Component {
           <title>{this.props.title}</title>
           <link href="https://fonts.googleapis.com/css?family=Comfortaa|Roboto" rel="stylesheet" />
           <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
-          <link rel="stylesheet" href="/style.css" />
         </head>
         <body>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
