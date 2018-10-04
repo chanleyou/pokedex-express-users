@@ -30,7 +30,7 @@ class Layout extends React.Component {
         <body>
           <div className="container">
             <header className="row">
-              <h1>List</h1>
+              <h1>Pokedex</h1>
               <LogoutButton cookies={this.props.cookies}/>
             </header>
             <main className="row">

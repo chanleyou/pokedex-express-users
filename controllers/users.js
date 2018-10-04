@@ -5,8 +5,12 @@ module.exports = (pool) => {
 	return {
 
 		login: (req, res) => {
-			
-			res.render ('users/login');
+
+			if (req.cookies.loggedin) {
+				res.redirect('/pokemon/');
+			} else {				
+				res.render ('users/login');
+			}			
 		},
 
 		loginPost: (req, res) => {
@@ -25,7 +29,7 @@ module.exports = (pool) => {
 					if (password === result.rows[0].password) {
 
 						res.cookie('loggedin', 'true');
-						res.cookie('user', username);
+						res.cookie('user', result.rows[0].id);
 
 						res.redirect('/pokemon/');
 					} else {
@@ -39,6 +43,7 @@ module.exports = (pool) => {
 		logout: (req, res) => {
 			
 			res.clearCookie('loggedin');
+			res.clearCookie('user');
 
 			res.redirect('/');
 		},

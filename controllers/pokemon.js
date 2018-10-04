@@ -38,7 +38,6 @@ module.exports = (pool) => {
 					res.sendStatus(500);
 				} else {
 
-					console.log(req.cookies);
 					res.render('pokemon/index', {result: result.rows, cookies: req.cookies});
 				}
 			})

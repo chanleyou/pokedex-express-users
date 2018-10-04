@@ -1,6 +1,35 @@
 var React = require("react");
 var Layout = require('../layout/layout')
 
+class CatchButton extends React.Component {
+  render () {
+
+    let cookies = this.props.cookies;
+    let pokemon = this.props.pokemon;
+
+    for (let i in this.props.users) {
+      if (parseInt(this.props.users[i].id) === parseInt(cookies.user)) {
+        console.log(this.props.user[i].id + " vs " + cookies.user);
+        return <div>You have this Pokemon.</div>
+      }
+    }
+
+    if (cookies.loggedin && cookies.user) {
+      return (
+        <form method="POST" action="/ownership">
+                <input type="hidden" name="user_id" value ={cookies.user} />
+                <input type="hidden" name="pokemon_id" value={pokemon.id} />
+                <input type="submit" value="Catch" />
+              </form>
+      )
+    } else {
+      return (
+        <div />
+      )
+    }
+  }
+}
+
 class Pokemon extends React.Component {
   render() {
 
@@ -32,6 +61,7 @@ class Pokemon extends React.Component {
         <ul>
           {users}
         </ul>
+        <CatchButton pokemon={pokemon} users={this.props.users} cookies={this.props.cookies} />
       </Layout>
     );
   }
