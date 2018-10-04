@@ -1,4 +1,5 @@
 var React = require("react");
+var Layout = require('../layout/layout');
 
 class Home extends React.Component {
   render() {
@@ -8,15 +9,12 @@ class Home extends React.Component {
     });
 
     return (
-      <html>
-        <head />
-        <body>
-          <h1>Welcome to the Pokedex!</h1>
-          <ul>
-            {pokemon}
-          </ul>
-        </body>
-      </html>
+      <Layout title="Pokedex">
+        <h1>Welcome to the Pokedex!</h1>
+        <ul>
+          {pokemon}
+        </ul>
+      </Layout>
     )
   }
 }

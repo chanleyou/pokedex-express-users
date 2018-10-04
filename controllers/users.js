@@ -35,6 +35,13 @@ module.exports = (pool) => {
 			})
 		},
 
+		logout: (req, res) => {
+			
+			res.clearCookie('loggedin');
+
+			res.redirect('/');
+		},
+
 		create: (req, res) => {
 
 			let username = req.body.name;

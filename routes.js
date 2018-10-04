@@ -26,7 +26,9 @@ module.exports = (app, pool) => {
 
 	app.get('/users/new', users.newForm);
 
-	app.post('/users/login', users.loginPost); 
+	app.post('/users/login', users.loginPost);
+	
+	app.post('/users/logout', users.logout);
 
 	app.get('/', users.login);
 
