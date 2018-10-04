@@ -84,7 +84,34 @@ module.exports = (pool) => {
 		newForm: (req, res) => {
 
 			res.render('users/new');
-		}
+		},
+
+		get: (req, res) => {
+
+			let id = req.params.id;
+
+			let userQuery = `SELECT * from users WHERE id = ${id};`;
+
+			pool.query(userQuery, (err, userResult) => {
+				if (err) {
+					console.error(err);
+					res.sendStatus(500);
+				} else {
+
+					pokemonQuery = `SELECT pokemon.id, pokemon.name FROM pokemon INNER JOIN users_pokemon ON (pokemon.id = users_pokemon.pokemon_id) WHERE users_pokemon.user_id = ${id};`;
+
+					pool.query(pokemonQuery, (err, pokemonResult) => {
+						if (err) {
+							console.error(err);
+							res.sendStatus(500);
+						} else {
+
+							res.render('users/user', {user: userResult.rows[0], pokemon: pokemonResult.rows, cookies: req.cookies});
+						}
+					})
+				}
+			})
+		},
 
 	}
 }

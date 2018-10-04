@@ -16,15 +16,17 @@ module.exports = (app, pool) => {
 	// app.put('/users/:id', users.update);
 	// app.delete('/users/:id', users.delete);
 	app.get('/users/new', users.newForm);
+	// app.get('/users/:id/edit', users.editForm);
+	app.get('/users/:id', users.get);
+	// app.get('/users/', users.index);
+	
 	app.post('/users/login', users.loginPost);
 	app.post('/users/logout', users.logout);
 	app.get('/', users.login);
-	// app.get('/users/:id/edit', users.editForm);
-	// app.get('/users/:id', users.get);
-	// app.get('/users/', users.index);
 
 	const ownership = require('./controllers/ownership')(pool);
 
 	app.post('/ownership', ownership.create);
+	app.delete('/ownership', ownership.delete);
 
 }
