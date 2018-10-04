@@ -1,0 +1,34 @@
+module.exports = (app, pool) => {
+
+	const pokemon = require('./controllers/pokemon')(pool);
+
+	// app.post('/pokemon/new', pokemon.create);
+
+	// app.put('/pokemon/:id', pokemon.update);
+
+	// app.delete('/pokemon/:id', pokemon.delete);
+
+	// app.get('/pokemon/new', pokemon.newForm);
+
+	// app.get('/pokemon/:id/edit', pokemon.editForm);
+	
+	app.get('/pokemon/:id', pokemon.get);
+	
+	// app.get('/pokemon/', pokemon.index);
+
+	// const users = require('.controllers/users')(pool);
+
+	// app.post('/users/new', users.create);
+
+	// app.put('/users/:id', users.update);
+
+	// app.delete('/users/:id', users.delete);
+
+	// app.get('/users/new', users.newForm);
+
+	// app.get('/users/:id/edit', users.editForm);
+	
+	// app.get('/users/:id', users.get);
+	
+	// app.get('/users/', users.index);
+}

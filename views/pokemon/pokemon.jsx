@@ -3,9 +3,9 @@ var React = require("react");
 class Pokemon extends React.Component {
   render() {
 
-    let pokemon = this.props.result;
-    let userList = this.props.users.map ( user => {
-      return <li key={user.id}>{user.name}</li>
+    let pokemon = this.props.result[0];
+    let users = this.props.result.map (user => {
+      return <li key={user.user_id}>{user.user_name}</li>
     })
 
     return (
@@ -13,7 +13,7 @@ class Pokemon extends React.Component {
         <head />
         <body>
           <div>
-            <ul className="pokemon-list">
+            <ul>
               <li className="pokemon-attribute">
                 id: {pokemon.id}
               </li>
@@ -29,11 +29,10 @@ class Pokemon extends React.Component {
               <li className="pokemon-attribute">
                 weight: {pokemon.weight}
               </li>
-
             </ul>
             <h4>{pokemon.name} is owned by:</h4>
             <ul>
-              {userList}
+              {users}
             </ul>
           </div>
         </body>
