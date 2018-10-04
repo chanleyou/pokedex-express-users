@@ -1,9 +1,23 @@
 var React = require('react');
 
+class LogoutButton extends React.Component {
+
+  render () {
+    
+    if (this.props.cookies.loggedin) {
+      return ( 
+        <form method="POST" action="/users/logout">
+          <input type="submit" className="btn" value="Logout" />
+        </form>
+      )
+    } else return <div />
+  }
+}
+
 class Layout extends React.Component {
 
   render () {
-
+    
     return (
 
       <html>
@@ -17,9 +31,7 @@ class Layout extends React.Component {
           <div className="container">
             <header className="row">
               <h1>List</h1>
-							<form method="POST" action="/users/logout">
-								<input type="submit" className="btn" value="Logout" />
-							</form>
+              <LogoutButton cookies={this.props.cookies}/>
             </header>
             <main className="row">
               {this.props.children}

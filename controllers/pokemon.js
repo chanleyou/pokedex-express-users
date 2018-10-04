@@ -4,22 +4,26 @@ module.exports = (pool) => {
 		get: (req, res) => {
 
 			let id = req.params.id;
-			
-			let query = `
-						SELECT pokemon.id, pokemon.name, pokemon.img, pokemon.weight, pokemon.height, users.id AS user_id, users.name AS user_name
-						FROM pokemon
-						INNER JOIN users_pokemon
-						ON (users_pokemon.pokemon_id = pokemon.id)
-						INNER JOIN users
-						ON (users.id = users_pokemon.user_id)
-						WHERE pokemon.id = ${id};`;
 
-			pool.query(query, (err, result) => {
+			let pokemonQuery = `SELECT * from pokemon WHERE id = ${id};`;
+
+			pool.query(pokemonQuery, (err, pokemonResult) => {
 				if (err) {
 					console.error(err);
 					res.sendStatus(500);
 				} else {
-					res.render('pokemon/pokemon', {result: result.rows});
+
+					userQuery = `SELECT * FROM users INNER JOIN users_pokemon ON (users.id = users_pokemon.user_id) WHERE users_pokemon.pokemon_id = ${id};`;
+
+					pool.query(userQuery, (err, userResult) => {
+						if (err) {
+							console.error(err);
+							res.sendStatus(500);
+						} else {
+
+							res.render('pokemon/pokemon', {pokemon: pokemonResult.rows[0], users: userResult.rows, cookies: req.cookies});
+						}
+					})
 				}
 			})
 		},
@@ -33,10 +37,12 @@ module.exports = (pool) => {
 					console.error(err);
 					res.sendStatus(500);
 				} else {
-					res.render('pokemon/index', {result: result.rows});
+
+					console.log(req.cookies);
+					res.render('pokemon/index', {result: result.rows, cookies: req.cookies});
 				}
 			})
 		},
 
 	}
-}
+}	

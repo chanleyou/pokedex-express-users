@@ -25,6 +25,7 @@ module.exports = (pool) => {
 					if (password === result.rows[0].password) {
 
 						res.cookie('loggedin', 'true');
+						res.cookie('user', username);
 
 						res.redirect('/pokemon/');
 					} else {

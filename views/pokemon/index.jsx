@@ -9,7 +9,8 @@ class Home extends React.Component {
     });
 
     return (
-      <Layout title="Pokedex">
+      
+      <Layout title="Pokedex" cookies={this.props.cookies}>
         <h1>Welcome to the Pokedex!</h1>
         <ul>
           {pokemon}
