@@ -2,7 +2,7 @@ module.exports = (app, pool) => {
 
 	const pokemon = require('./controllers/pokemon')(pool);
 
-	// app.post('/pokemon/new', pokemon.create);
+	// app.post('/pokemon', pokemon.create);
 
 	// app.put('/pokemon/:id', pokemon.update);
 
@@ -14,17 +14,21 @@ module.exports = (app, pool) => {
 	
 	app.get('/pokemon/:id', pokemon.get);
 	
-	// app.get('/pokemon/', pokemon.index);
+	app.get('/pokemon/', pokemon.index);
 
-	// const users = require('.controllers/users')(pool);
+	const users = require('./controllers/users')(pool);
 
-	// app.post('/users/new', users.create);
+	app.post('/users', users.create);
 
 	// app.put('/users/:id', users.update);
 
 	// app.delete('/users/:id', users.delete);
 
-	// app.get('/users/new', users.newForm);
+	app.get('/users/new', users.newForm);
+
+	app.post('/users/login', users.loginPost); 
+
+	app.get('/', users.login);
 
 	// app.get('/users/:id/edit', users.editForm);
 	

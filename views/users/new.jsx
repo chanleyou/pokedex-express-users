@@ -1,15 +1,17 @@
 var React = require("react");
 
-class New extends React.Component {
+class NewUser extends React.Component {
   render() {
     return (
       <html>
         <head />
         <body>
+          <h1>New User</h1>
           <form method="POST" action="/users">
-            <div>
-              name:<input name="name" type="text" />
-            </div>
+            <label>Username:</label>
+            <input type="text" name="name" required />
+            <label>Password:</label>
+            <input type="text" name="password" />
             <input type="submit" value="Submit" />
           </form>
         </body>
@@ -18,4 +20,4 @@ class New extends React.Component {
   }
 }
 
-module.exports = New;
+module.exports = NewUser;

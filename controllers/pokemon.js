@@ -19,11 +19,24 @@ module.exports = (pool) => {
 					console.error(err);
 					res.sendStatus(500);
 				} else {
-					res.render('pokemon/pokemon', {result:result.rows});
+					res.render('pokemon/pokemon', {result: result.rows});
 				}
 			})
 		},
 
+		index: (req, res) => {
+
+			let query = `SELECT * FROM pokemon;`;
+
+			pool.query(query, (err, result) => {
+				if (err) {
+					console.error(err);
+					res.sendStatus(500);
+				} else {
+					res.render('pokemon/index', {result: result.rows});
+				}
+			})
+		},
 
 	}
 }

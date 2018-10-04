@@ -25,6 +25,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jsx');
 app.engine('jsx', reactEngine);
 
+// ROUTES 
 require('./routes',)(app, pool);
 
 // ROUTE FUNCTIONS GENERALISED
@@ -100,34 +101,6 @@ require('./routes',)(app, pool);
 //   newForm(req, res, "users");
 // });
 
-// app.get('/pokemon/:id', (req, res) => {
-//   let id = req.params.id;
-
-//   let queryString = `SELECT * FROM pokemon WHERE id =${id};`;
-
-//   pool.query(queryString, (err, result) => {
-//     if (err) {
-//       console.error('Query Error:', err.stack);
-//     } else {
-
-//       let joinQuery = `SELECT users.id, users.name
-//                       FROM users
-//                       INNER JOIN users_pokemon
-//                       ON (users.id = users_pokemon.user_id)
-//                       WHERE users_pokemon.pokemon_id = ${id};`;
-
-//       pool.query(joinQuery, (err, joinResult) => {
-//         if (err) {
-//           console.error('Query Error:', err.stack);
-//         } else {
-//           console.log('Query Result:', joinResult.rows);
-
-//           res.render( `pokemon/item`, {result: result.rows[0], users: joinResult.rows});
-//         }
-//       })
-//     }
-//   })
-// });
 
 // app.get('/users/:id', (req, res) => {
 
@@ -160,9 +133,6 @@ require('./routes',)(app, pool);
 //     })
 // });
 
-// app.get('/pokemon/', (req, res) => {
-//   index(req, res, "pokemon");
-// })
 
 // app.get('/users/', (req, res) => {
 //   index(req, res, "users");
