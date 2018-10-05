@@ -1,13 +1,17 @@
 var React = require("react");
 var Layout = require('../layout/layout');
 
+const sha256 = require ('js-sha256');
+const SALT = "micropotato";
+
 class CatchButton extends React.Component {
   render () {
 
     let cookies = this.props.cookies;
     let pokemon = this.props.pokemon;
 
-    if (cookies.loggedin && cookies.user) {
+    // if the logged in user is correct to the current user
+    if (cookies.loggedin === sha256(cookies.user + 'loggedin' + SALT)) {
       return (
         <form method="POST" action="/ownership">
           <input type="hidden" name="user_id" value ={cookies.user} />

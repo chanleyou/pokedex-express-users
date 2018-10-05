@@ -1,6 +1,8 @@
 const sha256 = require ('js-sha256');
 
 module.exports = (pool) => {
+
+	const SALT = "micropotato";
 	
 	return {
 
@@ -33,9 +35,13 @@ module.exports = (pool) => {
 					} else {
 
 						if (password === result.rows[0].password) {
+
+							let userid = result.rows[0].id;
+
+							let currentSessionCookie = sha256(userid + 'loggedin' + SALT);
 	
-							res.cookie('loggedin', 'true');
-							res.cookie('user', result.rows[0].id);
+							res.cookie('loggedin', currentSessionCookie);
+							res.cookie('user', userid);
 							res.cookie('username', result.rows[0].name);
 	
 							res.redirect('/pokemon/');

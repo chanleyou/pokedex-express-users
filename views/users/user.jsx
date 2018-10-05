@@ -1,14 +1,18 @@
 var React = require("react");
 var Layout = require('../layout/layout');
 
+const sha256 = require ('js-sha256');
+const SALT = "micropotato";
+
 class ReleaseButton extends React.Component {
   render () {
     
     let user = this.props.user;
     let cookies = this.props.cookies;
     let pokemon = this.props.pokemon;
-  
-    if (user.id === parseInt(cookies.user)) {      
+
+    // if the logged in user is the same as the user OF THE PAGE
+    if (cookies.loggedin === sha256(user.id + 'loggedin' + SALT)) {      
       return (
         <div>
           <input type="hidden" name="user_id" value ={cookies.user} />
