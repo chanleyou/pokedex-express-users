@@ -6,7 +6,7 @@ class Home extends React.Component {
     
     let pokemon = this.props.result.map(pokemon => {
       return (
-        <div key={pokemon.id} className="col-6 col-md-2 my-1">
+        <div key={pokemon.id} className="col-6 col-sm-3 col-lg-2 my-1">
           <div className="card p-1">
             <a href={"/pokemon/" + pokemon.id}>
               <img className="card-img-top" src={pokemon.img} />
